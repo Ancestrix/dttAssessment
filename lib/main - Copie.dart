@@ -26,10 +26,11 @@ Future<Houses> loadHousesAsset() async {
 
   final response = await http
       .get(Uri.parse('https://intern.d-tt.nl/api/house'),
-          headers:{HttpHeaders.authorizationHeader: "98bww4ezuzfePCYFxJEWyszbUXc7dxRx"});
+          headers:{"Access-Key": "98bww4ezuzfePCYFxJEWyszbUXc7dxRx"});
   //if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
+  print(response.body);
     return Houses.fromJson(jsonDecode(response.body));
   /* } else {
     // If the server did not return a 200 OK response,
