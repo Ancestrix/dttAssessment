@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dtt_assessment/NotFound.dart';
-import 'package:dtt_assessment/HousesClass.kts';
+import 'package:dtt_assessment/House.kts';
 
 ///
 class ListViewWidget extends StatelessWidget {
   /// Giving the widget the needed parameters to build the listview
-  late Future<List<Houses>> futureHouses;
-  late List<Houses> items;
+  late Future<List<House>> futureHouses;
+  late List<House> items;
 
   ListViewWidget({super.key, required this.futureHouses, required this.items});
 
@@ -20,7 +19,7 @@ class ListViewWidget extends StatelessWidget {
       /// Returns the ListView  by building the Future list
       /// of houses first and then building the listview cards
       /// containing the JSON data stored previously
-      return FutureBuilder<List<Houses>>(
+      return FutureBuilder<List<House>>(
         future: futureHouses,
         builder: (context, snapshot) {
           if (snapshot.hasData) {

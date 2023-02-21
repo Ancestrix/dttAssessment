@@ -1,12 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:dtt_assessment/House.kts';
 import 'package:dtt_assessment/ListViewWidget.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:dtt_assessment/HousesClass.kts';
 
 /// Fetching the data from the API
 Future<String> loadHousesAsset() async {
@@ -22,10 +19,10 @@ Future<String> loadHousesAsset() async {
 }
 
 /// Load the houses from the response and parse the JSON data
-Future<List<Houses>> loadHouses() async {
+Future<List<House>> loadHouses() async {
   String jsonString = await loadHousesAsset();
   final List<dynamic> parsedJson = json.decode(jsonString);
-  return parsedJson.map((json) => Houses.fromJson(json)).toList();
+  return parsedJson.map((json) => House.fromJson(json)).toList();
 }
 
 /// Overview widget that will be use by the navigation bar
@@ -43,10 +40,10 @@ class _Overview extends State<Overview> {
       const ImageIcon(AssetImage("assets/images/search.png"));
 
   /// Houses supposed to be instanced during the FutureBuilder
-  late Future<List<Houses>> futureHouses;
+  late Future<List<House>> futureHouses;
 
   /// Items shown in the result listview
-  var items = <Houses>[];
+  var items = <House>[];
 
   /// Filter the ListView depending on the searchbar query
   void filterSearchResults(String query) {

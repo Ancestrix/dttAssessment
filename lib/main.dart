@@ -1,14 +1,8 @@
-import 'dart:io';
 
 import 'package:dtt_assessment/information.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:dtt_assessment/overview.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   /// Ensure that the splash screen is held during the intialization
