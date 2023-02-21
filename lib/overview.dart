@@ -10,9 +10,8 @@ import 'package:dtt_assessment/HousesClass.kts';
 
 //Fetching the data from the API
 Future<String> loadHousesAsset() async {
-  final response = await http
-      .get(Uri.parse('https://intern.d-tt.nl/api/house'),
-          headers:{"Access-Key": "98bww4ezuzfePCYFxJEWyszbUXc7dxRx"});
+  final response = await http.get(Uri.parse('https://intern.d-tt.nl/api/house'),
+      headers: {"Access-Key": "98bww4ezuzfePCYFxJEWyszbUXc7dxRx"});
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -38,50 +37,70 @@ class Overview extends StatefulWidget {
 }
 
 class _Overview extends State<Overview> {
-  TextEditingController editingController = TextEditingController();
+  final editingController = TextEditingController();
+  late ImageIcon iconSearch ;
   late Future<List<Houses>> futureHouses;
-
   var items = <Houses>[];
 
   void filterSearchResults(String query) {
-
     futureHouses.then((data) => {
-      setState((){items=data.where((element) => element.price.toString().toLowerCase()
-          .contains(query.toLowerCase())).toList();})
-    }
-    );
+          setState(() {
+            items = data
+                .where((element) => ("${element.zip} ${element.city}")
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+                .toList();
+          })
+        });
   }
+
   @override
   void initState() {
     super.initState();
-    futureHouses=loadHouses();
+    futureHouses = loadHouses();
+    filterSearchResults("");
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: const Color(0x00f7f7f7),
+        color: const Color(0xfff7f7f7),
         child: Padding(
             padding: const EdgeInsets.all(25),
             child: Column(children: [
               Expanded(
                 flex: 0,
-                child: TextField(
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
-                  controller: editingController,
-                  decoration: const InputDecoration(
-                      labelText: "Search",
-                      hintText: "Search",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25)))),
-                ),
-              ),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                    child: TextField(
+                      onChanged: (value) {
+                        filterSearchResults(value);
+                        iconSearch = const ImageIcon( AssetImage("assets/images/close-2.png"));
+                      },
+                      onSubmitted: (val) {
+                        filterSearchResults(val);
+                      },
+                      controller: editingController,
+                      decoration: InputDecoration(
+                        filled: true,
+                          fillColor: const Color(0xffebebeb),
+                          hintText: "Search for a home",
+                          suffixIcon: editingController.text.isNotEmpty ? IconButton(
+                              onPressed: () {
+                                editingController.clear();
+                                filterSearchResults("");
+                                setState(() {iconSearch = const ImageIcon( AssetImage("assets/images/search.png") );});
+
+                              },
+                              icon: iconSearch)
+                              : null,
+                          border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))))),
+                    )),
               Expanded(
-                  child: ListViewWidget(futureHouses: futureHouses ,items : items)),
+                  child:
+                      ListViewWidget(futureHouses: futureHouses, items: items)),
             ])));
   }
 }

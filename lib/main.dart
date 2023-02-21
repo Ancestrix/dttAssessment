@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         ])),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "",),
             BottomNavigationBarItem(icon: Icon(Icons.info), label: "")
           ],
           currentIndex: _selectedIndex,

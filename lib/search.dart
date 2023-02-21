@@ -1,104 +1,38 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class SearchTextField extends StatefulWidget{
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-        primarySwatch: Colors.blue,
-    ),
-    home: const MyHomePage(title: 'ListView with Search'),
-    );
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return SearchTextFieldState();
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  final String title;
-
-  const MyHomePage({super.key, required this.title});
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController editingController = TextEditingController();
-
-  final duplicateItems = List<String>.generate(10000, (i) => "Item $i");
-  var items = <String>[];
-
-  @override
-  void initState() {
-    items.addAll(duplicateItems);
-    super.initState();
-  }
-
-  void filterSearchResults(String query) {
-    List<String> dummySearchList = <String>[];
-    dummySearchList.addAll(duplicateItems);
-    if(query.isNotEmpty) {
-      List<String> dummyListData = <String>[];
-      dummySearchList.forEach((item) {
-        if(item.toLowerCase().contains(query)) {
-          dummyListData.add(item);
-        }
-      });
-      setState(() {
-        items.clear();
-        items.addAll(dummyListData);
-      });
-      return;
-    } else {
-      setState(() {
-        items.clear();
-        items.addAll(duplicateItems);
-      });
-    }
-
-  }
+class SearchTextFieldState extends State<SearchTextField>{
+  final _usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                controller: editingController,
-                decoration: const InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(items[index]),
-                  );
-                },
-              ),
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: TextField(
+            controller: _usernameController,
+            onChanged: (text) {
+              setState(() {});
+            },
+            decoration: InputDecoration(
+                labelText: 'Username',
+                suffixIcon: _usernameController.text.isNotEmpty
+                    ? IconButton(
+                    onPressed: () {
+                      _usernameController.clear();
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.cancel, color: Colors.grey))
+                    : null),
+          ),
         ),
       ),
     );
