@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dtt_assessment/NotFound.dart';
 import 'package:dtt_assessment/HousesClass.kts';
 
+///
 class ListViewWidget extends StatelessWidget {
+  /// Giving the widget the needed parameters to build the listview
   late Future<List<Houses>> futureHouses;
   late List<Houses> items;
 
@@ -10,9 +13,13 @@ class ListViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Returns the empty search result if no houses in Items
     if (items.isEmpty) {
-      return ListEmpty();
+      return Scaffold(resizeToAvoidBottomInset: false, body: ListEmpty());
     } else {
+      /// Returns the ListView  by building the Future list
+      /// of houses first and then building the listview cards
+      /// containing the JSON data stored previously
       return FutureBuilder<List<Houses>>(
         future: futureHouses,
         builder: (context, snapshot) {
@@ -53,28 +60,5 @@ class ListViewWidget extends StatelessWidget {
         },
       );
     }
-  }
-}
-
-class ListEmpty extends StatelessWidget {
-  ListEmpty({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Expanded(child:Column(children: const [
-        Spacer(),
-        Image(
-            image: AssetImage("assets/images/undraw_empty_xct9-2.png"),
-            width: 250),
-        Spacer(),
-        Text(
-          "No result found !\nPerhaps try another search ?",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Color(0x33000000)),
-        ),
-        Spacer(),
-      ])),
-    );
   }
 }

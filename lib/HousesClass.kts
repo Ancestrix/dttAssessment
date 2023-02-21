@@ -1,5 +1,6 @@
 
-class Houses {
+///
+class House {
     final int id;
     final String image;
     final int price;
@@ -13,7 +14,7 @@ class Houses {
     final int longitude;
     final String createdDate;
 
-    const Houses({
+    const House({
         required this.id,
         required this.image,
         required this.price,
@@ -28,8 +29,8 @@ class Houses {
         required this.createdDate,
     });
 
-    factory Houses.fromJson(Map<String, dynamic> json) {
-        return Houses(
+    factory House.fromJson(Map<String, dynamic> json) {
+        return House(
                 id: json['id'],
                 image: json['image'],
                 price: json['price'],
