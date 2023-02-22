@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dtt_assessment/House.kts';
 import 'package:dtt_assessment/ListViewWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 /// Fetching the data from the API
@@ -36,6 +39,13 @@ class Overview extends StatefulWidget {
 class _Overview extends State<Overview> {
   final editingController = TextEditingController();
 
+  bool servicestatus = false;
+  bool haspermission = false;
+  late LocationPermission permission;
+  late Position position;
+  late double long , lat;
+  late StreamSubscription<Position> positionStream;
+
   ImageIcon iconSearch =
       const ImageIcon(AssetImage("assets/images/search.png"));
 
@@ -58,12 +68,81 @@ class _Overview extends State<Overview> {
         });
   }
 
+
   /// Initiate the state of the Houses and the result listview
   @override
   void initState() {
     super.initState();
     futureHouses = loadHouses();
     filterSearchResults("");
+    checkGps();
+  }
+
+
+  checkGps() async {
+    servicestatus = await Geolocator.isLocationServiceEnabled();
+    if(servicestatus){
+      permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Location permissions are denied');
+        }else if(permission == LocationPermission.deniedForever){
+          print("'Location permissions are permanently denied");
+        }else{
+          haspermission = true;
+        }
+      }else{
+        haspermission = true;
+      }
+
+      if(haspermission){
+        setState(() {
+          //refresh the UI
+        });
+
+        getLocation();
+      }
+    }else{
+      print("GPS Service is not enabled, turn on GPS location");
+    }
+
+    setState(() {
+      //refresh the UI
+    });
+  }
+
+  getLocation() async {
+    position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position.longitude); //Output: 80.24599079
+    print(position.latitude); //Output: 29.6593457
+
+    long = position.longitude;
+    lat = position.latitude;
+
+    setState(() {
+      //refresh UI
+    });
+
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high, //accuracy of the location data
+      distanceFilter: 100, //minimum distance (measured in meters) a
+      //device must move horizontally before an update event is generated;
+    );
+
+    StreamSubscription<Position> positionStream = Geolocator.getPositionStream(
+        locationSettings: locationSettings).listen((Position position) {
+      print(position.longitude); //Output: 80.24599079
+      print(position.latitude); //Output: 29.6593457
+
+      long = position.longitude;
+      lat = position.latitude;
+
+      setState(() {
+        //refresh UI on update
+      });
+    });
   }
 
   @override
@@ -77,8 +156,10 @@ class _Overview extends State<Overview> {
               Expanded(
                   flex: 0,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                    padding: const EdgeInsets.only(top: 30),
                     child: TextField(
+                        style: const TextStyle(
+                            fontFamily: "Gotham SSm-Light", fontSize: 12),
 
                         /// Filter every time a character is typed in TextField
                         onChanged: (value) {
@@ -96,6 +177,10 @@ class _Overview extends State<Overview> {
                             filled: true,
                             fillColor: const Color(0xffebebeb),
                             hintText: "Search for a home",
+                            hintStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0x66000000),
+                                fontFamily: "Gotham SSm-Book"),
                             suffixIcon: IconButton(
 
                                 /// Clear the input when clicking the icon
@@ -109,6 +194,7 @@ class _Overview extends State<Overview> {
                                 },
                                 icon: iconSearch),
                             border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))))),
                   )),
@@ -116,7 +202,7 @@ class _Overview extends State<Overview> {
               /// Listview widget containing the search result
               Expanded(
                   child:
-                      ListViewWidget(futureHouses: futureHouses, items: items)),
+                      ListViewWidget(futureHouses: futureHouses, items: items, lat: lat,long: long,)),
             ])));
   }
 }
