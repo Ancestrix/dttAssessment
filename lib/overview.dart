@@ -39,11 +39,12 @@ class Overview extends StatefulWidget {
 class _Overview extends State<Overview> {
   final editingController = TextEditingController();
 
+
   bool servicestatus = false;
   bool haspermission = false;
   late LocationPermission permission;
   late Position position;
-  late double long , lat;
+  double long=0, lat=0;
   late StreamSubscription<Position> positionStream;
 
   ImageIcon iconSearch =
@@ -68,7 +69,6 @@ class _Overview extends State<Overview> {
         });
   }
 
-
   /// Initiate the state of the Houses and the result listview
   @override
   void initState() {
@@ -77,34 +77,33 @@ class _Overview extends State<Overview> {
     filterSearchResults("");
     checkGps();
   }
-
-
+  /// Ensure the permission status concerning the device location
   checkGps() async {
     servicestatus = await Geolocator.isLocationServiceEnabled();
-    if(servicestatus){
+    if (servicestatus) {
       permission = await Geolocator.checkPermission();
 
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           print('Location permissions are denied');
-        }else if(permission == LocationPermission.deniedForever){
+        } else if (permission == LocationPermission.deniedForever) {
           print("'Location permissions are permanently denied");
-        }else{
+        } else {
           haspermission = true;
         }
-      }else{
+      } else {
         haspermission = true;
       }
 
-      if(haspermission){
+      if (haspermission) {
         setState(() {
           //refresh the UI
         });
 
         getLocation();
       }
-    }else{
+    } else {
       print("GPS Service is not enabled, turn on GPS location");
     }
 
@@ -113,34 +112,36 @@ class _Overview extends State<Overview> {
     });
   }
 
+  /// Get the user position by storing longitude and latitude
   getLocation() async {
-    position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position.longitude); //Output: 80.24599079
-    print(position.latitude); //Output: 29.6593457
+
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     long = position.longitude;
     lat = position.latitude;
 
     setState(() {
-      //refresh UI
+      ///refresh UI
     });
 
+    /// Precise the accuracy of the location data
+    /// minimum distance (measured in meters) a
+    /// device must move horizontally before an
+    /// update event is generated;
     LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high, //accuracy of the location data
-      distanceFilter: 100, //minimum distance (measured in meters) a
-      //device must move horizontally before an update event is generated;
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
     );
 
-    StreamSubscription<Position> positionStream = Geolocator.getPositionStream(
-        locationSettings: locationSettings).listen((Position position) {
-      print(position.longitude); //Output: 80.24599079
-      print(position.latitude); //Output: 29.6593457
-
+    StreamSubscription<Position> positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) {
       long = position.longitude;
       lat = position.latitude;
 
       setState(() {
-        //refresh UI on update
+        ///refresh UI on update
       });
     });
   }
@@ -156,7 +157,7 @@ class _Overview extends State<Overview> {
               Expanded(
                   flex: 0,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(bottom: 25),
                     child: TextField(
                         style: const TextStyle(
                             fontFamily: "Gotham SSm-Light", fontSize: 12),
@@ -201,8 +202,12 @@ class _Overview extends State<Overview> {
 
               /// Listview widget containing the search result
               Expanded(
-                  child:
-                      ListViewWidget(futureHouses: futureHouses, items: items, lat: lat,long: long,)),
+                  child: ListViewWidget(
+                futureHouses: futureHouses,
+                items: items,
+                lat: lat,
+                long: long,
+              )),
             ])));
   }
 }

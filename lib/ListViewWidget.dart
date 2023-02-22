@@ -13,7 +13,12 @@ class ListViewWidget extends StatelessWidget {
   late List<House> items;
   late double long, lat;
 
-  ListViewWidget({super.key, required this.futureHouses, required this.items, required this.long, required this.lat});
+  ListViewWidget(
+      {super.key,
+      required this.futureHouses,
+      required this.items,
+      required this.long,
+      required this.lat});
 
   @override
   Widget build(BuildContext context) {
@@ -37,67 +42,87 @@ class ListViewWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 items.sort((a, b) => a.price.compareTo(b.price));
                 final house = items[index];
-                final startCoordinate = Location(house.longitude.toDouble(),house.latitude.toDouble());
-                final endCoordinate = Location(long,lat);
+                final startCoordinate = Location(
+                    house.longitude.toDouble(), house.latitude.toDouble());
+                final endCoordinate = Location(long, lat);
                 final haversineDistance = HaversineDistance();
-                final distance =
-                haversineDistance.haversine(startCoordinate, endCoordinate, Unit.KM).toStringAsFixed(2);
+                final distance = haversineDistance
+                    .haversine(startCoordinate, endCoordinate, Unit.KM)
+                    .toStringAsFixed(2);
                 return Card(
                   elevation: 5,
-                  child: ListTile(
-                    leading: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                          fit: BoxFit.cover,
-                          alignment: FractionalOffset.topCenter,
-                          image: NetworkImage(house.image),
-                        )))),
-                    title: Column(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                                '£${house.price}'.replaceAll(
-                                    RegExp(r'\B(?=(\d{3})+(?!\d))'), ','),
-                                style: const TextStyle(
-                                    fontFamily: "Gotham SSm-Bold"))),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("${house.zip} ${house.city}",
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0x33000000),
-                                    fontFamily: "Gotham SSm-Book")))
-                      ],
-                    ),
-                    subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Row(children: [
-                          const ImageIcon(
-                              AssetImage("assets/images/bed-2@2x.png"),
-                              size: 15),
-                          Text(' ${house.bedrooms}'),
-                          const Spacer(),
-                          const ImageIcon(
-                              AssetImage("assets/images/shower@2x.png"),
-                              size: 15),
-                          Text(' ${house.bathrooms}'),
-                          const Spacer(),
-                          const ImageIcon(
-                              AssetImage(
-                                  "assets/images/square-measument@2x.png"),
-                              size: 15),
-                          Text(' ${house.size}'),
-                          const Spacer(),
-                          const ImageIcon(
-                              AssetImage("assets/images/pin@2x.png"),
-                              size: 15),
-                          Text('$distance km')
-                        ])),
-                    trailing: Text('${house.bathrooms}'),
-                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: ListTile(
+                        leading: AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                              fit: BoxFit.cover,
+                              alignment: FractionalOffset.topCenter,
+                              image: NetworkImage(house.image),
+                            )))),
+                        title: Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    '£${house.price}'.replaceAll(
+                                        RegExp(r'\B(?=(\d{3})+(?!\d))'), ','),
+                                    style: const TextStyle(
+                                        fontFamily: "Gotham SSm-Bold"))),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("${house.zip} ${house.city}",
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0x66000000),
+                                        fontFamily: "Gotham SSm-Book")))
+                          ],
+                        ),
+                        subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Row(children: [
+                              const ImageIcon(
+                                  AssetImage("assets/images/bed-2@2x.png"),
+                                  size: 15),
+                              Text('  ${house.bedrooms}',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Color(0x66000000),
+                                      fontFamily: "Gotham SSm-Book")),
+                              const Spacer(),
+                              const ImageIcon(
+                                  AssetImage("assets/images/shower@2x.png"),
+                                  size: 15),
+                              Text('  ${house.bathrooms}',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Color(0x66000000),
+                                      fontFamily: "Gotham SSm-Book")),
+                              const Spacer(),
+                              const ImageIcon(
+                                  AssetImage(
+                                      "assets/images/square-measument@2x.png"),
+                                  size: 15),
+                              Text('  ${house.size}',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Color(0x66000000),
+                                      fontFamily: "Gotham SSm-Book")),
+                              const Spacer(),
+                              const ImageIcon(
+                                  AssetImage("assets/images/pin@2x.png"),
+                                  size: 15),
+                              Text('  $distance km',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Color(0x66000000),
+                                      fontFamily: "Gotham SSm-Book"))
+                            ])),
+                        trailing: Text('${house.bathrooms}'),
+                      )),
                 );
               },
             );

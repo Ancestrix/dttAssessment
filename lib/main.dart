@@ -1,4 +1,3 @@
-
 import 'package:dtt_assessment/information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -8,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
-
   /// Ensure that the splash screen is held during the intialization
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -46,12 +44,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    if (_selectedIndex==1){
+    if (_selectedIndex == 1) {
       color = Colors.transparent;
-    }else{
+    } else {
       color = const Color(0xCC000000);
     }
 
