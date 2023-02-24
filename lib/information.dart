@@ -15,21 +15,21 @@ class Information extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         child: Column(
           children: [
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
                 child: Text(
                   "ABOUT",
                   style: TextStyle(
-                      color: Color(0xCC000000),
-                      fontSize: 15,
+                      color: const Color(0xCC000000),
+                      fontSize: MediaQuery.of(context).size.height * 0.03,
                       height: 1,
                       fontFamily: "Gotham SSm-Bold"),
                 ),
               ),
             ),
-            const Text(
+            Text(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing"
                 "elit, sed do eiusmod tempor incididunt ut labore et"
                 "dolore magna aliqua. Ut enim ad minim veniam,"
@@ -48,19 +48,19 @@ class Information extends StatelessWidget {
                 "dolore eu fugiat nulla pariatur. Excepteur sint"
                 "occaecat cupidatat non proident.",
                 style: TextStyle(
-                    color: Color(0x66000000),
-                    fontSize: 13,
+                    color: const Color(0x66000000),
+                    fontSize: MediaQuery.of(context).size.height * 0.018,
                     height: 1.2,
                     fontFamily: "Gotham SSm-Book")),
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+                padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
                 child: Text(
                   "Design and Development",
                   style: TextStyle(
-                      color: Color(0xCC000000),
-                      fontSize: 15,
+                      color: const Color(0xCC000000),
+                      fontSize: MediaQuery.of(context).size.height * 0.03,
                       height: 1,
                       fontFamily: "Gotham SSm-Bold"),
                 ),
@@ -82,6 +82,7 @@ class Information extends StatelessWidget {
                         ),
                         Align(
                             alignment: Alignment.centerLeft,
+
                             ///  Url clickable text
                             child: RichText(
                                 text: TextSpan(

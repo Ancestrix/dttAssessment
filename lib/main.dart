@@ -2,9 +2,6 @@ import 'package:dtt_assessment/information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:dtt_assessment/overview.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   /// Ensure that the splash screen is held during the intialization

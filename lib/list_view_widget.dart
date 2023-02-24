@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:dtt_assessment/NotFound.dart';
+import 'package:dtt_assessment/not_found.dart';
 import 'package:dtt_assessment/House.kts';
+import 'package:dtt_assessment/detail.dart';
 import 'package:haversine_distance/haversine_distance.dart';
 
 /// Widget that will show the search result and the list of
@@ -24,11 +23,11 @@ class ListViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Returns the empty search result if no houses in Items
     if (items.isEmpty) {
-      return Scaffold(resizeToAvoidBottomInset: false, body: ListEmpty());
+      return const Scaffold(resizeToAvoidBottomInset: false, body: ListEmpty());
     } else {
       /// Returns the ListView  by building the Future list
       /// of houses first and then building the listview cards
-      /// containing the JSON data stored previously
+      /// containing the API data stored previously
       return FutureBuilder<List<House>>(
         future: futureHouses,
         builder: (context, snapshot) {
@@ -50,10 +49,15 @@ class ListViewWidget extends StatelessWidget {
                     .haversine(startCoordinate, endCoordinate, Unit.KM)
                     .toStringAsFixed(2);
                 return Card(
-                  elevation: 5,
+                  elevation: 4,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: ListTile(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                    house: items[index], distance: distance))),
                         leading: AspectRatio(
                             aspectRatio: 1,
                             child: Container(
@@ -61,7 +65,12 @@ class ListViewWidget extends StatelessWidget {
                                     image: DecorationImage(
                               fit: BoxFit.cover,
                               alignment: FractionalOffset.topCenter,
-                              image: NetworkImage(house.image),
+                              image: NetworkImage(
+                                  'https://intern.d-tt.nl${house.image}',
+                                  headers: {
+                                    "Access-Key":
+                                        "98bww4ezuzfePCYFxJEWyszbUXc7dxRx"
+                                  }),
                             )))),
                         title: Column(
                           children: [
@@ -121,7 +130,12 @@ class ListViewWidget extends StatelessWidget {
                                       color: Color(0x66000000),
                                       fontFamily: "Gotham SSm-Book"))
                             ])),
-                        trailing: Text('${house.bathrooms}'),
+                        // trailing: const IconButton(
+                        //     onPressed: null,
+                        //     icon: Icon(
+                        //       Icons.favorite,
+                        //       color: Colors.amberAccent,
+                        //     )),
                       )),
                 );
               },
