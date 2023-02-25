@@ -30,7 +30,9 @@ Future<List<House>> loadHouses() async {
 
 /// Overview widget that will be use by the navigation bar
 class Overview extends StatefulWidget {
-  const Overview({super.key});
+  late bool isDarkMode;
+
+  Overview(this.isDarkMode, {super.key});
 
   @override
   State<StatefulWidget> createState() => _Overview();
@@ -45,9 +47,6 @@ class _Overview extends State<Overview> {
   late Position position;
   double long = 0, lat = 0;
   late StreamSubscription<Position> positionStream;
-
-  ImageIcon iconSearch =
-      const ImageIcon(AssetImage("assets/images/search.png"));
 
   /// Houses supposed to be instanced during the FutureBuilder
   late Future<List<House>> futureHouses;
@@ -131,10 +130,12 @@ class _Overview extends State<Overview> {
     });
   }
 
+  ImageIcon iconSearch = ImageIcon(
+    AssetImage("assets/images/search.png"),
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: const Color(0xfff7f7f7),
         child: Padding(
             padding: const EdgeInsets.all(25),
             child: Column(children: [
@@ -144,14 +145,24 @@ class _Overview extends State<Overview> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 25),
                     child: TextField(
-                        style: const TextStyle(
-                            fontFamily: "Gotham SSm-Light", fontSize: 12),
+                        style: TextStyle(
+                            fontFamily: "Gotham SSm-Light",
+                            fontSize: 12,
+                            color: widget.isDarkMode
+                                ? Color(0xffe65541)
+                                : Colors.black),
 
                         /// Filter every time a character is typed in TextField
                         onChanged: (value) {
                           filterSearchResults(value);
-                          iconSearch = const ImageIcon(
-                              AssetImage("assets/images/close-2.png"));
+                          setState(() {
+                            iconSearch = ImageIcon(
+                              AssetImage("assets/images/close-2.png"),
+                              color: widget.isDarkMode
+                                  ? Color(0xffe65541)
+                                  : Colors.black,
+                            );
+                          });
                         },
 
                         /// Filter once again when the query is submitted
@@ -174,8 +185,12 @@ class _Overview extends State<Overview> {
                                   editingController.clear();
                                   filterSearchResults("");
                                   setState(() {
-                                    iconSearch = const ImageIcon(
-                                        AssetImage("assets/images/search.png"));
+                                    iconSearch = ImageIcon(
+                                      AssetImage("assets/images/search.png"),
+                                      color: widget.isDarkMode
+                                          ? Color(0xffe65541)
+                                          : Colors.black,
+                                    );
                                   });
                                 },
                                 icon: iconSearch),
@@ -188,6 +203,7 @@ class _Overview extends State<Overview> {
               /// Listview widget containing the search result
               Expanded(
                   child: ListViewWidget(
+                widget.isDarkMode,
                 futureHouses: futureHouses,
                 items: items,
                 lat: lat,

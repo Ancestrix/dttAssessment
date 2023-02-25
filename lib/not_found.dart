@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 /// Defining the Empty result widget used in the ListViewWidget
 class ListEmpty extends StatelessWidget {
-  const ListEmpty({super.key});
+  late bool isDarkMode;
+  ListEmpty(this.isDarkMode,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class ListEmpty extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Expanded(
-            child: Column(children: const [
+            child: Column(children:  [
           Spacer(),
           Image(
             image: AssetImage(
@@ -21,7 +22,9 @@ class ListEmpty extends StatelessWidget {
           Text(
             "No result found !\nPerhaps try another search ?",
             textAlign: TextAlign.center,
-            style: TextStyle(color: Color(0x33000000)),
+            style: TextStyle(color: isDarkMode
+                ? Color(0xffebebeb)
+                : Color(0x33000000)),
           ),
           Spacer(),
         ])),
