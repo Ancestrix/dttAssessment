@@ -10,24 +10,23 @@ class ListEmpty extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
-        child: Expanded(
             child: Column(children:  [
-          Spacer(),
-          Image(
+          const Spacer(),
+          const Image(
             image: AssetImage(
               "assets/images/undraw_empty_xct9-2.png",
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             "No result found !\nPerhaps try another search ?",
             textAlign: TextAlign.center,
             style: TextStyle(color: isDarkMode
-                ? Color(0xffebebeb)
-                : Color(0x33000000)),
+                ? const Color(0xffebebeb)
+                : const Color(0x33000000)),
           ),
-          Spacer(),
-        ])),
+          const Spacer(),
+        ]),
       ),
     );
   }

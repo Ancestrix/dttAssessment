@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ThemeMethod{
 
-// Define the theme data for the app
+/// Define the theme data for the app
 final darkTheme = ThemeData(
   brightness: Brightness.dark,
   appBarTheme: const AppBarTheme(
